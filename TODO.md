@@ -1,0 +1,4 @@
+- Rotate players
+- Take turn based input
+  - Enter row :
+  - Enter column:
