@@ -1,21 +1,29 @@
-'[[[[[[[[[[class Player {
+class Player {
   #title;
   #sign;
+  #moves;
 
   constructor({ title, sign }) {
+    this.#moves = [];
     this.#title = title;
     this.#sign = sign;
   }
 
-  play({ row, column }, board) {
-    board.add({ row, column }, this.#sign);
+  addMove(move) {
+    this.#moves.push(move);
   }
 
-  hasWon(board) {
-    return board.hasWinningPositions(this.#sign);
+  get moves() {
+    return this.#moves;
   }
 
-  declareAsWinner(displayer) {
-    displayer(this.#title);
+  get name() {
+    return this.#title;
+  }
+
+  get sign() {
+    return this.#sign;
   }
 }
+
+exports.Player = Player;

@@ -1,35 +1,55 @@
+const colors = require("colors/safe");
 const BLANK = colors.hidden(" ");
-const { table } = require("table");
 
 class Board {
   #length;
   #breadth;
-  #config;
-  #boardData;
+  #grid;
+  #winningPositions;
 
-  constructor({ length, breadth }, config) {
+  constructor({ length, breadth }) {
     this.#length = length;
     this.#breadth = breadth;
-    this.#config = config;
+    this.#winningPositions = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9],
+      [1, 4, 7],
+      [2, 5, 8],
+      [3, 6, 9],
+      [1, 5, 9],
+      [3, 5, 7],
+    ];
     this.#create();
   }
 
   #create() {
-    this.#boardData = new Array(this.#length)
+    this.#grid = new Array(this.#length)
       .fill()
       .map(() => new Array(this.#breadth).fill(BLANK));
   }
 
-  add(position, sign) {
-    const { row, column } = position;
-    this.#boardData[row][column] = sign;
+  get data() {
+    return this.#grid;
   }
 
-  hasWinningPositions(sign) {
-    return this.#boardData[0][0] === sign;
+  hasPlayed({ x, y }) {
+    return this.#grid[x][y] !== BLANK;
   }
 
-  display(displayer) {
-    displayer(table(this.#boardData, this.#config));
+  place(sign, { x, y }) {
+    if (this.#grid[x][y] === BLANK) this.#grid[x][y] = sign;
+  }
+
+  hasWinningPositions(playerMoves) {
+    return this.#winningPositions.some((positions) =>
+      positions.every((position) => playerMoves.includes(position))
+    );
+  }
+
+  isFilled() {
+    return this.#grid.every((row) => !row.includes(BLANK));
   }
 }
+
+exports.Board = Board;
